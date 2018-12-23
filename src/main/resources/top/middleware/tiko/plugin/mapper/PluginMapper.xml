@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.middleware.tiko.plugin.mapper.PluginMapper">
+    <resultMap id="pluginResultMap" type="top.middleware.tiko.plugin.dto.Plugin">
+        <id column="id" property="id" jdbcType="NUMERIC"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="author" property="author" jdbcType="VARCHAR"/>
+        <result column="package" property="relatedPackage" jdbcType="VARCHAR"/>
+        <result column="tables" property="tables" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <delete id="dropPluginTables" parameterType="java.util.List">
+        DROP TABLE IF EXISTS
+        <foreach collection="tables" item="table" separator=",">
+            ${table}
+        </foreach>
+    </delete>
+</mapper>

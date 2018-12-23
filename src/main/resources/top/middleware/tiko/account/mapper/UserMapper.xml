@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.middleware.tiko.account.mapper.UserMapper">
+    <resultMap id="userResultMap" type="top.middleware.tiko.account.dto.User">
+        <id column="id" property="id" jdbcType="NUMERIC"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <collection property="roles" ofType="java.lang.String">
+            <result column="role_code" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+    <select id="selectUserByName" parameterType="java.lang.String" resultMap="userResultMap">
+        SELECT
+        su.id,
+        su.username,
+        su.password,
+        su.email,
+        sr.role_code
+        FROM sys_user su
+        LEFT JOIN sys_user_role sur ON su.id = sur.user_id
+        LEFT JOIN sys_role sr ON sur.role_id = sr.id
+        <where>
+            <choose>
+                <when test="username != null and username != ''">
+                    su.username = #{username}
+                </when>
+                <otherwise>
+                    0 = 1
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="0" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="sys_user"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统用户表</comment>
+        <createTable tableName="sys_user">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(15)" remarks="用户名">
+                <constraints unique="true" nullable="false" uniqueConstraintName="uk_username"/>
+            </column>
+            <column name="password" type="varchar(60)" remarks="密码">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(45)" remarks="邮件"/>
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <insert tableName="sys_user">
+            <column name="username">admin</column>
+            <column name="password">$2a$10$KslxpqfQMC6O13YXkJ59EeucsvSMHwx5LDmLKB6BIBYG9fi6tUKSm</column>
+            <column name="is_enabled">1</column>
+        </insert>
+        <insert tableName="sys_user">
+            <column name="username">tiko</column>
+            <column name="password">$2a$10$FBJqVi7wIhUOmn5LG52Bxe1uvuXS7nQ7FUTD7Z6BiLEMXn/slnVtW</column>
+            <column name="is_enabled">1</column>
+        </insert>
+        <rollback>
+            <dropTable tableName="sys_user"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="1" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="sys_role"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统用户表</comment>
+        <createTable tableName="sys_role">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role_code" type="varchar(45)" remarks="角色代码">
+                <constraints unique="true" nullable="false" uniqueConstraintName="uk_role_code"/>
+            </column>
+            <column name="role_name" type="varchar(45)" remarks="角色名">
+                <constraints unique="true" nullable="false" uniqueConstraintName="uk_role_name"/>
+            </column>
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <insert tableName="sys_role">
+            <column name="role_code">ADMIN</column>
+            <column name="role_name">管理员</column>
+            <column name="is_enabled">1</column>
+        </insert>
+        <insert tableName="sys_role">
+            <column name="role_code">USER</column>
+            <column name="role_name">用户</column>
+            <column name="is_enabled">1</column>
+        </insert>
+        <rollback>
+            <dropTable tableName="sys_role"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="sys_user_role"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统用户角色表</comment>
+        <createTable tableName="sys_user_role">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint unsigned" remarks="用户ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="bigint unsigned" remarks="角色ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <insert tableName="sys_user_role">
+            <column name="user_id">1000001</column>
+            <column name="role_id">1000001</column>
+            <column name="is_enabled">1</column>
+        </insert>
+        <rollback>
+            <dropTable tableName="sys_user_role"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="3" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="acl_sid"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统acl_sid表</comment>
+        <createTable tableName="acl_sid">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="sid" type="varchar(100)" remarks="用户或者角色名">
+                <constraints nullable="false"/>
+            </column>
+            <column name="principal" type="boolean" remarks="是否为用户">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <createIndex tableName="acl_sid" indexName="uk_acl_sid" unique="true">
+            <column name="sid"/>
+            <column name="principal"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="acl_sid"/>
+            <dropIndex tableName="acl_sid" indexName="uk_acl_sid"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="4" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="acl_class"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统acl_class表</comment>
+        <createTable tableName="acl_class">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="class" type="varchar(100)" remarks="Java类全限定名">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="acl_class"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="5" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="acl_object_identity"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统acl_object_identity表</comment>
+        <createTable tableName="acl_object_identity">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="object_id_class" type="bigint unsigned">
+                <constraints nullable="false"
+                             referencedTableName="acl_class"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_acl_object_identity_class"/>
+            </column>
+            <column name="object_id_identity" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_object" type="bigint unsigned">
+                <constraints referencedTableName="acl_object_identity"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_acl_object_identity_parent"/>
+            </column>
+            <column name="owner_sid" type="bigint unsigned">
+                <constraints referencedTableName="acl_sid"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_acl_object_identity_owner"/>
+            </column>
+            <column name="entries_inheriting" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <createIndex tableName="acl_object_identity" indexName="uk_acl_object_identity">
+            <column name="object_id_class"/>
+            <column name="object_id_identity"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="acl_object_identity"/>
+            <dropIndex tableName="acl_object_identity" indexName="uk_acl_object_identity"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="6" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="acl_entry"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统acl_entry表</comment>
+        <createTable tableName="acl_entry">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="acl_object_identity" type="bigint unsigned">
+                <constraints nullable="false"
+                             referencedTableName="acl_object_identity"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_acl_entry_object"/>
+            </column>
+            <column name="ace_order" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sid" type="bigint unsigned">
+                <constraints referencedTableName="acl_sid"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_acl_entry_acl"/>
+            </column>
+            <column name="mask" type="integer unsigned">
+                <constraints nullable="false"/>
+            </column>
+            <column name="granting" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="audit_success" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="audit_failure" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <createIndex tableName="acl_entry" indexName="uk_acl_entry">
+            <column name="acl_object_identity"/>
+            <column name="ace_order"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="acl_object_identity"/>
+            <dropIndex tableName="acl_entry" indexName="uk_acl_entry"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="7" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="oauth_client_details"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统oauth_client_details表</comment>
+        <createTable tableName="oauth_client_details">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_id" type="varchar(256)" remarks="客户端ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource_ids" type="varchar(256)" remarks="资源ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client_secret" type="varchar(256)" remarks="客户端密钥">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scope" type="varchar(256)" remarks="权限域">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authorized_grant_types" type="varchar(256)" remarks="授权类型">
+                <constraints nullable="false"/>
+            </column>
+            <column name="web_server_redirect_uri" type="varchar(256)" remarks="跳转URI"/>
+            <column name="authorities" type="varchar(256)" remarks="角色"/>
+            <column name="access_token_validity" type="int" remarks="access_token有效时间(秒)"/>
+            <column name="refresh_token_validity" type="int" remarks="refresh_token有效时间(秒)"/>
+            <column name="additional_information" type="varchar(4096)" remarks="其他信息"/>
+            <column name="autoapprove" type="varchar(256)" remarks="自动授权"/>
+
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <createIndex tableName="oauth_client_details" indexName="uk_client_id">
+            <column name="client_id"/>
+        </createIndex>
+        <insert tableName="oauth_client_details">
+            <column name="client_id" type="varchar(255)">tiko</column>
+            <column name="resource_ids" type="varchar(255)">resource_server</column>
+            <!--默认密钥为tiko-->
+            <column name="client_secret" type="varchar(255)">
+                $2a$10$7hXRSBguRWbB.LguEx5DduCilDFta1CTkMZxmq2mUeveJ6PaHXdgO
+            </column>
+            <column name="scope" type="varchar(255)">all</column>
+            <column name="authorities" type="varchar(255)">all</column>
+            <column name="authorized_grant_types" type="varchar(255)">password,refresh_token</column>
+            <column name="access_token_validity" type="int">86400</column>
+            <column name="refresh_token_validity" type="int">86400</column>
+        </insert>
+        <rollback>
+            <dropTable tableName="oauth_client_details"/>
+            <dropIndex tableName="oauth_client_details" indexName="uk_client_id"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="8" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="oauth_refresh_token"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统oauth_refresh_token表</comment>
+        <createTable tableName="oauth_refresh_token">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="token_id" type="varchar(256)" remarks="token ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="blob" remarks="资源ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authentication" type="blob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <createIndex tableName="oauth_refresh_token" indexName="uk_token_id">
+            <column name="token_id"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="oauth_refresh_token"/>
+            <dropIndex tableName="oauth_refresh_token" indexName="uk_token_id"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="9" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="oauth_code"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统oauth_code表</comment>
+        <createTable tableName="oauth_code">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authentication" type="blob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="oauth_code"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="10" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="oauth_approvals"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统oauth_approvals表</comment>
+        <createTable tableName="oauth_approvals">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="userId" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="clientId" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scope" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiresAt" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastModifiedAt" type="timestamp" defaultValueDate="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="oauth_code"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="11" author="Tiko" runAlways="false" failOnError="true">
+        <preConditions>
+            <not>
+                <tableExists tableName="sys_plugin"/>
+            </not>
+        </preConditions>
+        <comment>初始化系统sys_plugin表</comment>
+        <createTable tableName="sys_plugin">
+            <column name="id" type="bigint unsigned" autoIncrement="true" startWith="1000001" remarks="主键">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="package" type="varchar(300)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tables" type="varchar(600)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="tinyint unsigned" defaultValueNumeric="1" remarks="是否启用">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gmt_create" type="datetime" remarks="创建时间" defaultValueComputed="current_timestamp"/>
+            <column name="gmt_modified" type="datetime" remarks="修改时间" defaultValueDate="current_timestamp"/>
+            <column name="create_by" type="bigint unsigned" remarks="创建人" defaultValueNumeric="0"/>
+            <column name="modified_by" type="bigint unsigned" remarks="修改人" defaultValueNumeric="0"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="sys_plugin"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
+
+
+
